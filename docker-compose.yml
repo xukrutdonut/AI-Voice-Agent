@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  ai-voice-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ai-voice-agent
+    restart: unless-stopped
+    
+    # Environment variables - Add your API keys here or use .env file
+    environment:
+      - DEEPGRAM_API_KEY=${DEEPGRAM_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - PULSE_SERVER=unix:/run/user/1000/pulse/native
+      - SDL_AUDIODRIVER=alsa
+    
+    # Mount .env file for API keys
+    env_file:
+      - .env
+    
+    # Audio device access for Raspberry Pi 5
+    devices:
+      - /dev/snd:/dev/snd  # Audio devices
+    
+    # Volume mounts
+    volumes:
+      - ./output:/app/output  # For audio output files
+      - /run/user/1000/pulse:/run/user/1000/pulse:ro  # PulseAudio socket (optional)
+    
+    # Privileges for audio device access
+    privileged: false
+    
+    # Add capabilities for audio
+    cap_add:
+      - SYS_NICE
+    
+    # User configuration - runs as current user to access audio devices
+    # Uncomment and modify if needed
+    # user: "1000:1000"
+    
+    # Network mode
+    network_mode: host
+    
+    # Standard input for interactive mode (Press Enter to stop)
+    stdin_open: true
+    tty: true
