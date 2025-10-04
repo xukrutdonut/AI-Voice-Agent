@@ -1,3 +1,6 @@
 .env
 env
 *.mp3
+*.wav
+docker-compose.override.yml
+output/

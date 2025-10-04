@@ -1,0 +1,40 @@
+# docker-compose.override.yml.example
+# 
+# This is an example override file for docker-compose.
+# Copy this file to docker-compose.override.yml and customize as needed.
+# 
+# Usage:
+#   cp docker-compose.override.yml.example docker-compose.override.yml
+#   nano docker-compose.override.yml
+#   docker compose up
+#
+# The override file will be automatically used by docker compose.
+
+services:
+  ai-voice-agent:
+    # Development mode: mount source code for live editing
+    volumes:
+      - ./app.py:/app/app.py:ro
+      - ./output:/app/output
+    
+    # Custom audio device configuration
+    # Uncomment and adjust if you need to specify a particular audio device
+    # environment:
+    #   - AUDIODEV=hw:1,0  # Change to your audio card number
+    
+    # Alternative: Run with specific user ID
+    # Uncomment if you have permission issues
+    # user: "1000:1000"
+    
+    # For debugging: keep container running even if app crashes
+    # command: tail -f /dev/null
+    
+    # Resource limits (optional, adjust based on your Pi's capabilities)
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '2.0'
+    #       memory: 2G
+    #     reservations:
+    #       cpus: '1.0'
+    #       memory: 1G
